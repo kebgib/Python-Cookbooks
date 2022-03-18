@@ -47,3 +47,31 @@ with open(f'Scan_Results-{daytime.filedate}-{daytime.filetime}.json', 'w') as js
 # open() a saved json file and json.load() the contents in to a Dict() type object
 with open('my_saved_json_file.json') as json_file:
     json_object = json.load(json_file)
+
+    
+    
+    
+"""
+Handling nested JSON with data that cannot be serialized
+
+ex. AWS SDK boto3 returns JSON objects with datetime.datetime objects as values
+these objects cannot be serialized to JSON format and will throw an error.
+
+Use the datetimeHandler function and pass it in to json.dumps(data, default=datetimeHandler)
+"""
+def datetimeHandler(json_object):
+    """
+    Pass in to json.dumps in order to parse datetime objects to
+    isoformat strings -> json.dumps(my_data, default=datetimeHandler, indent=2)
+    
+    If specified, default should be a function that gets called for objects
+    that can’t otherwise be serialized. It should return a JSON encodable
+    version of the object or raise a TypeError. If not specified, TypeError is raised.
+    """
+    # https://docs.python.org/3/library/json.html#json.dump
+    if isinstance(json_object, datetime.datetime):
+        return json_object.isoformat()
+    
+    raise TypeError(f"[!] datetimeHandler() exception - unknown data type")
+
+my_json = json.dumps(my_data, default=datetimeHandler, indent=2)
