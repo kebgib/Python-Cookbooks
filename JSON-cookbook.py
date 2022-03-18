@@ -59,6 +59,9 @@ these objects cannot be serialized to JSON format and will throw an error.
 
 Use the datetimeHandler function and pass it in to json.dumps(data, default=datetimeHandler)
 """
+import json
+import datetime
+
 def datetimeHandler(json_object):
     """
     Pass in to json.dumps in order to parse datetime objects to
